@@ -41,16 +41,17 @@ MediDoctor is a medical platform with a streamlined, single-page layout designed
    ```bash
    git clone https://github.com/yourusername/MediDoctor.git
    cd MediDoctor
-Install Dependencies:
-Make sure you have Node.js installed. Then run:
-
-bash
-Copy code
-npm install
-Start the Server:
-
-bash
-Copy code
-node server.js
-Access the Application:
-Open your browser and navigate to http://localhost:3001.
+   
+2. **Install dependencies:**
+   ```bash
+   npm install
+3. **Starting the Server:**
+   Start the MongoDB service:
+   ```bash
+   mongod
+   Start the server:
+   ```bash
+   node server.js
+4.Accessing the Application:
+Open your browser.
+Navigate to http://localhost:3001.
