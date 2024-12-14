@@ -45,13 +45,12 @@ MediDoctor is a medical platform with a streamlined, single-page layout designed
 2. **Install dependencies:**
    ```bash
    npm install
-3. **Starting the Server:**
-   Start the MongoDB service:
+3. **Start the MongoDB service:**
    ```bash
    mongod
-   Start the server:
+4. **Start the server:**
    ```bash
    node server.js
-4.Accessing the Application:
-Open your browser.
-Navigate to http://localhost:3001.
+4. **Accessing the Application:**
+   Open your browser.
+   Navigate to http://localhost:3001.
