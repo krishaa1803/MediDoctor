@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Booking</title>
+    <link rel="stylesheet" href="bookslot.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Booking Slots</h2>
+        <div class="date-selector"></div>
+        <div id="time-slots" class="time-slots">
+            <div class="time-slot">12:30 pm</div>
+            <div class="time-slot">01:00 pm</div>
+            <div class="time-slot">01:30 pm</div>
+            <div class="time-slot">02:00 pm</div>
+            <div class="time-slot">02:30 pm</div>
+            <div class="time-slot">03:00 pm</div>
+            <div class="time-slot">03:30 pm</div>
+            <div class="time-slot">04:00 pm</div>
+            <div class="time-slot">04:30 pm</div>
+            <div class="time-slot">05:00 pm</div>
+            <div class="time-slot">05:30 pm</div>
+            <div class="time-slot">07:00 pm</div>
+            <div class="time-slot">07:30 pm</div>
+            <div class="time-slot">08:00 pm</div>
+            <div class="time-slot">08:30 pm</div>
+        </div>
+        <input type="email" id="patient-email" placeholder="Enter your email" required>
+        <button id="book-button" class="book-button">Book an appointment</button>
+        
+        <!-- Message container for feedback -->
+        <div id="message-container" class="message-container"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateSelector = document.querySelector(".date-selector");
+            const timeSlots = document.getElementById("time-slots");
+            const messageContainer = document.getElementById("message-container");
+            const today = new Date();
+
+            // Sample booked slots data (date format: yyyy-mm-dd)
+            const bookedSlots = {
+                "2024-11-11": ["01:30 pm", "04:00 pm"],
+                "2024-11-12": ["12:30 pm", "03:30 pm", "05:00 pm"],
+                // Add more dates and times as needed
+            };
+
+            let selectedDate = null;
+            let selectedTimeSlot = null;
+
+            // Generate the next 7 days in the date-selector
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+
+                // Format date as yyyy-mm-dd for easy comparison
+                const dateKey = date.toISOString().split("T")[0];
+
+                // Create a new div for each day
+                const dayDiv = document.createElement("div");
+                dayDiv.classList.add("day");
+                dayDiv.dataset.date = dateKey; // Store date for easy reference
+
+                // Add the day of the week and day number
+                const dayOfWeek = date.toLocaleString("en-US", { weekday: "short" }).toUpperCase();
+                const dayNumber = date.getDate();
+                dayDiv.innerHTML = `${dayOfWeek} <span>${dayNumber}</span>`;
+
+                // Add "selected" class to the current day by default
+                if (i === 0) {
+                    dayDiv.classList.add("selected");
+                    selectedDate = dateKey; // Set the first day as the selected date
+                    updateTimeSlots(dateKey); // Update slots for the first day
+                }
+
+                // Add event listener for selecting a day
+                dayDiv.addEventListener("click", function () {
+                    document.querySelectorAll(".day").forEach(day => day.classList.remove("selected"));
+                    dayDiv.classList.add("selected");
+                    selectedDate = dateKey; // Set selected date
+                    updateTimeSlots(dateKey); // Update slots for selected day
+                });
+
+                dateSelector.appendChild(dayDiv);
+            }
+
+            // Function to update time slots based on the selected day
+            function updateTimeSlots(dateKey) {
+                // Clear previous "booked" status
+                timeSlots.querySelectorAll(".time-slot").forEach(slot => {
+                    slot.classList.remove("booked");
+                    slot.classList.remove("selected");
+                    slot.style.cursor = "pointer"; // Reset cursor
+                });
+
+                // Check if there are booked slots for the selected date
+                if (bookedSlots[dateKey]) {
+                    // Mark booked slots
+                    bookedSlots[dateKey].forEach(time => {
+                        const slot = Array.from(timeSlots.children).find(slot => slot.textContent === time);
+                        if (slot) {
+                            slot.classList.add("booked");
+                            slot.style.cursor = "not-allowed";
+                        }
+                    });
+                }
+            }
+
+            // Event delegation for time slot selection
+            timeSlots.addEventListener('click', (e) => {
+                // Ensure the clicked element is a time slot and not a booked one
+                if (e.target.classList.contains('time-slot') && !e.target.classList.contains('booked')) {
+                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    selectedTimeSlot = e.target.textContent;
+                }
+            });
+
+            // Handle appointment booking
+            document.getElementById('book-button').addEventListener('click', () => {
+                const patientEmail = document.getElementById('patient-email').value;
+                
+                if (selectedDate && selectedTimeSlot && patientEmail) {
+                    fetch('/book-appointment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ date: selectedDate, time: selectedTimeSlot, patientEmail })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the UI to mark the slot as booked
+                            if (!bookedSlots[selectedDate]) bookedSlots[selectedDate] = [];
+                            bookedSlots[selectedDate].push(selectedTimeSlot);
+                            updateTimeSlots(selectedDate);
+
+                            messageContainer.innerHTML = '<div class="success-message">Appointment booked successfully! A confirmation email has been sent.</div>';
+                        } else {
+                            messageContainer.innerHTML = `<div class="error-message">${data.message || 'Failed to book appointment. Please try again.'}</div>`;
+                        }
+                    });
+                } else {
+                    messageContainer.innerHTML = '<div class="error-message">Please select a date, time slot, and enter your email.</div>';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

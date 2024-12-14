@@ -1,0 +1,101 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* Basic Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Sign Up Container Styling */
+.signup-container {
+    background-color: #fff;
+    padding: 2rem 3rem;
+    border-radius: 12px; 
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); 
+    border: 1px solid #e0e0e0; 
+    width: 400px;
+    text-align: center;
+}
+
+.signup-container h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.signup-container .highlight {
+    color: rgb(22, 43, 162);
+}
+
+/* Form Styling */
+form label {
+    font-size: 1rem;
+    color: #333;
+    display: block;
+    text-align: left;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    border-color: rgb(22, 43, 162);
+}
+
+form button {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: rgb(22, 43, 162);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #003366;
+}
+
+/* Link Styling */
+form p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+form p a {
+    color: rgb(22, 43, 162);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+form p a:hover {
+    text-decoration: underline;
+}

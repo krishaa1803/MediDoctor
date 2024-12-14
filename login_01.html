@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="login_01.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2><span class="highlight">User</span> Login</h2>
+        <form id="login-form">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="user@example.com" required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            
+            <button type="submit">Login</button>
+            
+            <p>Admin Login? <a href="admin.html">Click here</a></p>
+            <p>Don't have an account? <a href="signup_02.html">Sign up</a></p>
+        </form>
+
+        <!-- This div will show the login status after successful login -->
+        <div id="login-status"></div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();  // Prevent the form from submitting normally
+
+            // Get email and password from the input fields
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Create the data object to send to the server
+            const loginData = { email, password };
+
+            try {
+                // Send POST request to the server for login verification
+                const response = await fetch('http://localhost:3001/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const data = await response.json();
+                console.log('Response from server:', data);  // Log the response for debugging
+
+                if (response.status === 200) {
+                    // If login is successful, store the user's name in localStorage
+                    localStorage.setItem('userName', data.name);
+
+                    // Redirect to index.html
+                    window.location.href = 'indexuser.html';  // Redirect to the home page
+                } else {
+                    // If login fails, show an error message
+                    document.getElementById('login-status').innerHTML = data.message;
+                    document.getElementById('login-status').style.color = 'red';  // Show error in red
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                document.getElementById('login-status').innerHTML = 'Something went wrong, please try again later.';
+                document.getElementById('login-status').style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MediDoctor</title>
+
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+<body>
+
+<!-- header section starts -->
+
+<header class="header">
+
+    <a href="#" class="logo"> <i class="fas fa-stethoscope"></i> MediDoctor Admin </a>
+
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="#users">Users</a>
+        <a href="#appointments">Appointments</a>
+        <a href="#orders">Orders</a>
+        <a href="#blogs">Blogs</a>
+        <a href="#medicines">Medicines</a>
+        <a href="login_01.html">Log Out</a>
+    </nav>
+
+    <div id="menu-btn" class="fas fa-bars"></div>
+
+</header>
+
+<!-- header section ends -->
+
+<!-- Admin Dashboard Section Starts -->
+
+<section class="admin-dashboard">
+
+    <h1 class="heading">Admin Dashboard</h1>
+
+    <div class="dashboard-container">
+
+        <!-- Users Section -->
+        <div class="dashboard-box" id="users">
+            <h3>Users</h3>
+            <p>Manage all registered users</p>
+            <a href="admin/users.html" class="btn">View Users <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+        <!-- Appointments Section -->
+        <div class="dashboard-box" id="appointments">
+            <h3>Appointments</h3>
+            <p>Manage doctor appointments</p>
+            <a href="admin/appointments.html" class="btn">View Appointments <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="dashboard-box" id="orders">
+            <h3>Orders</h3>
+            <p>Manage orders for medicines</p>
+            <a href="admin/orders.html" class="btn">View Orders <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+        <!-- Blogs Section -->
+        <div class="dashboard-box" id="blogs">
+            <h3>Blogs</h3>
+            <p>Manage blog posts</p>
+            <a href="admin/blogs.html" class="btn">View Blogs <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+        <!-- Medicines Section -->
+        <div class="dashboard-box" id="medicines">
+            <h3>Medicines</h3>
+            <p>Manage available medicines</p>
+            <a href="admin/medicines.html" class="btn">View Medicines <span class="fas fa-chevron-right"></span></a>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Admin Dashboard Section Ends -->
+
+<!-- footer section starts -->
+
+<section class="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>Quick Links</h3>
+            <a href="index.html"> <i class="fas fa-chevron-right"></i> Home </a>
+            <a href="admin.html"> <i class="fas fa-chevron-right"></i> Admin Dashboard </a>
+        </div>
+
+        <div class="box">
+            <h3>Contact Info</h3>
+            <a href="#"> <i class="fas fa-phone"></i> +91 1800 1800 234 </a>
+            <a href="#"> <i class="fas fa-envelope"></i> MediDoctor@gmail.com </a>
+            <a href="#"> <i class="fas fa-map-marker-alt"></i> Mumbai, India</a>
+        </div>
+
+    </div>
+
+    <div class="credit"> Created By <span>MediDoctor IT Team</span> | All Rights Reserved </div>
+
+</section>
+
+<!-- footer section ends -->
+
+</body>
+</html>
