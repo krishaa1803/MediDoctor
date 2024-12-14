@@ -38,12 +38,19 @@ MediDoctor is a medical platform with a streamlined, single-page layout designed
 ## How to Run the Project  
 
 1. **Clone the Repository:**  
-  
+   ```bash
    git clone https://github.com/yourusername/MediDoctor.git
    cd MediDoctor
 Install Dependencies:
 Make sure you have Node.js installed. Then run:
+
+bash
+Copy code
 npm install
+Start the Server:
+
+bash
+Copy code
 node server.js
 Access the Application:
-Open your browser and navigate to http://localhost:3001
+Open your browser and navigate to http://localhost:3001.
