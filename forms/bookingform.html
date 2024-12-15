@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediDoctor</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="../css/style.css">
+    <script >
+        function text(x)
+    {
+        if(x==1)
+        {
+            document.getElementById("checkups").style.display = "block";
+        }
+        else
+        {
+            document.getElementById("checkups").style.display = "none";
+        }
+        if(x==2)
+        {
+            document.getElementById("doctorss").style.display = "block";
+        }
+        else
+        {
+            document.getElementById("doctorss").style.display = "none";
+        }
+        if(x==3)
+        {
+            document.getElementById("ambulancess").style.display = "block";
+        }
+        else
+        {
+            document.getElementById("ambulancess").style.display = "none";
+        }
+        if(x==4)
+        {
+            document.getElementById("beds").style.display = "block";
+        }
+        else
+        {
+            document.getElementById("beds").style.display = "none";
+        }
+       
+       
+      
+        return;
+    
+    }
+    </script>
+
+</head>
+<body>
+    <!-- booking section starts   -->
+
+<section class="book" id="book">
+
+    <h1 class="heading"> <span>book</span> now </h1>    
+
+    <div class="row">
+
+        <div class="image">
+            <img src="../image/book-img.svg" alt="">
+        </div>
+
+        <form>
+            <h3>Book Appointment</h3>
+            <input type="text" placeholder="Patient Name" class="box">
+            <div style="display: flex;">
+                <div class="box">
+                    <input type="number" placeholder="Patient Age">
+                </div>
+                <div class="box">
+                    <label for="gender">Gender</label>
+                    <input type="radio" value="Male" name="gender" id="male">
+                    <label for="male">Male</label>
+                    <input type="radio" value="FeMale" name="gender"id="female">
+                    <label for="male">Female</label>
+                </div>
+            </div>
+            <div class="box">
+                <label for="services">Services</label>
+                <div class="box">
+
+                    <div style="display: flex; ">
+                        <div  >
+                            <input type="radio" value="checkup" name="services" id="checkup" onclick="text(1)">
+                            <label for="male">CheckUps & Test</label>
+                        </div>
+                        
+                    
+                </div>
+                <div id="options">
+                    <div>
+                        <div id="checkups">
+                            <select class="box" name="checkup" id="checkup">
+                                <option value="ccheckups" >Choose CheckUps & Tests</option>
+                               <option value="checkup1">checkup1</option>
+                               <option value="checkup2">checkup2</option>
+                               <option value="checkup3">checkup3</option>
+                               <option value="checkup4">checkup4</option>
+                            </select>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            <input type="number" placeholder="Phone Number" class="box">
+            <input type="email" placeholder="Email-Id" class="box">
+            <input type="date" class="box">
+            <input type="submit" value="book now" class="btn">
+        </form>
+
+    </div>
+
+</section>
+
+<!-- booking section ends -->
+</body>
