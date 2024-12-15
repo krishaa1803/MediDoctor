@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediDoctor</title>
+
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <!-- Header section starts -->
+    <header class="header">
+        <a href="#" class="logo"><i class="fas fa-stethoscope"></i> MediDoctor</a>
+
+        <nav class="navbar">
+            <a href="/indexuser.html">Back to Home</a>
+            <a href="store.html">Medical Store</a>
+        </nav>
+
+        <div id="menu-btn" class="fas fa-bars"></div>
+    </header>
+    <!-- Header section ends -->
+
+    <main>
+        <!-- Cart Section -->
+        <div class="section-container cart-section">
+            <h1>Your Cart</h1>
+            <div id="checkout-container" class="checkout-container"></div>
+        </div>
+
+        <!-- Delivery Address Section -->
+        <div class="section-container address-section">
+            <h2>Delivery Address</h2>
+            <form id="delivery-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+                
+                <label for="address">Address:</label>
+                <textarea id="address" required></textarea>
+                
+                <label for="city">City:</label>
+                <input type="text" id="city" required>
+                
+                <label for="postal-code">Postal Code:</label>
+                <input type="text" id="postal-code" required>
+            </form>
+        </div>
+
+        <!-- Payment Method Section -->
+        <div class="section-container payment-section">
+            <h2>Payment Method</h2>
+            <div>
+                <input type="radio" id="cash" name="payment-method" value="Cash" checked>
+                <label for="cash">Cash</label>
+            </div>
+        </div>
+
+        <!-- Place Order Section -->
+        <div class="section-container place-order-section">
+            <button id="place-order">Place Order</button>
+            <div id="confirmation-message" class="confirmation-message"></div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadCartItems);
+
+        function loadCartItems() {
+            const savedItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const checkoutContainer = document.getElementById('checkout-container');
+            let totalAmount = 0;
+
+            checkoutContainer.innerHTML = '';
+            savedItems.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+                checkoutContainer.innerHTML += `
+                    <div class="checkout-item">
+                        <h3>${item.title}</h3>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p>Price: ₹${itemTotal.toFixed(2)}</p>
+                    </div>
+                `;
+            });
+
+            checkoutContainer.innerHTML += `<h2>Total: ₹${totalAmount.toFixed(2)}</h2>`;
+        }
+
+        document.getElementById('place-order').addEventListener('click', async () => {
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const postalCode = document.getElementById('postal-code').value;
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+            const currentDate = new Date();
+            const deliveryDate = new Date();
+            deliveryDate.setDate(currentDate.getDate() + 3);
+
+            const orderData = {
+                items: JSON.parse(localStorage.getItem('cartItems')),
+                total: document.querySelector('.checkout-container h2').innerText,
+                name,
+                address,
+                city,
+                postalCode,
+                paymentMethod,
+                deliveryDate: deliveryDate.toISOString().split('T')[0]
+            };
+
+            try {
+                const response = await fetch('http://localhost:3001/save-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.ok) {
+                    localStorage.removeItem('cartItems');
+                    window.location.href = `order-placed.html?name=${encodeURIComponent(name)}&date=${encodeURIComponent(deliveryDate.toDateString())}`;
+                } else {
+                    console.error('Failed to save order');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

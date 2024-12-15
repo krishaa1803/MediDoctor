@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediDoctor</title>
+
+    <!-- font awesome cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<script>
+    // Search function
+    function filterProducts() {
+    var searchQuery = document.getElementById("search-bar").value.toLowerCase(); // Get search query
+    var products = document.querySelectorAll(".product-card"); // Select all product cards
+
+    // Loop through each product card and check if it matches the search query
+    products.forEach(function(product) {
+        var title = product.querySelector("h3").textContent.toLowerCase();  // Product title
+        var description = product.querySelector("p").textContent.toLowerCase(); // Product description
+
+        // If either the title or description contains the search query, display the product, otherwise hide it
+        if (title.includes(searchQuery) || description.includes(searchQuery)) {
+            product.style.display = "block";  // Show product
+        } else {
+            product.style.display = "none";   // Hide product
+        }
+    });
+}
+
+
+// Function to show quantity options after clicking Add to Cart
+function addToCart(button) {
+    // Find the closest product card
+    var productCard = button.closest('.product-card');
+
+    // Show the quantity and checkout buttons
+    var quantityContainer = productCard.querySelector('.quantity-container');
+    quantityContainer.style.display = 'flex';  // Use flex for better layout control
+
+    // Hide the "Add to Cart" button after it is clicked
+    button.style.display = 'none';
+}
+
+// Function to change the quantity value
+function changeQuantity(button, change) {
+    var quantityInput = button.closest('.product-card').querySelector('.quantity-input');
+    var currentQuantity = parseInt(quantityInput.value);
+
+    // Update the quantity with the change, but ensure it's at least 1
+    var newQuantity = currentQuantity + change;
+    if (newQuantity >= 1) {
+        quantityInput.value = newQuantity;
+    }
+}
+let cartItems = []; // Array to store cart items
+
+    function addToCart(button) {
+        const productCard = button.closest('.product-card');
+        const title = productCard.querySelector('h3').textContent;
+        const price = parseFloat(productCard.querySelector('.price').textContent.replace('₹', ''));
+        
+        const quantityContainer = productCard.querySelector('.quantity-container');
+        quantityContainer.style.display = 'flex';
+        button.style.display = 'none';
+        
+        const existingItem = cartItems.find(item => item.title === title);
+        
+        if (existingItem) {
+            existingItem.quantity += 1; // Increment quantity if item already in cart
+        } else {
+            cartItems.push({ title, price, quantity: 1 });
+        }
+        
+        updateCartStorage();
+    }
+
+    function changeQuantity(button, change) {
+        const productCard = button.closest('.product-card');
+        const title = productCard.querySelector('h3').textContent;
+        const quantityInput = productCard.querySelector('.quantity-input');
+        
+        let quantity = parseInt(quantityInput.value) + change;
+        quantity = Math.max(1, quantity);
+        quantityInput.value = quantity;
+
+        const item = cartItems.find(item => item.title === title);
+        if (item) {
+            item.quantity = quantity;
+        }
+        updateCartStorage();
+    }
+
+    function updateCartStorage() {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }
+
+    // Load existing cart items on page load if present
+    window.onload = () => {
+        const savedItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        cartItems = savedItems;
+    };
+
+</script>
+<body>
+
+    <!-- Header section starts -->
+    <header class="header">
+        <a href="#" class="logo"><i class="fas fa-stethoscope"></i> MediDoctor</a>
+
+        <!-- Search bar placed in the center -->
+        <div class="search-bar">
+            <input type="text" id="search-bar" placeholder="Search for medicines..." onkeyup="filterProducts()">
+            <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+        </div>
+        
+
+        <nav class="navbar">
+            <a href="/indexuser.html">Back to Home</a>
+            <a href="checkout.html">Proceed to Checkout</a>
+            
+            <button type="submit" class="cart-btn"><i class="fas fa-cart-plus"></i></button>
+        </nav>
+
+        <div id="menu-btn" class="fas fa-bars"></div>
+    </header>
+    <!-- Header section ends -->
+
+    <!-- Services section starts -->
+    <section class="services" id="services">
+        <h1 class="heading">Medical <span>Store</span></h1>
+
+        <div class="box-container">
+            <!-- Product Card Template -->
+            <div class="product-card">
+                <img src="storeimage/clearstone.jpg" alt="Product Image">
+                <h3>HOMEOLAV Clearstone Drops</h3>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="price">₹299</div>
+                <p>HOMEOLAV Clearstone Drops 30Ml || Sbl Homeopathic Medicines || Pack Of 2</p>
+                <button onclick="addToCart(this)">Add to Cart</button>
+    
+                <!-- Quantity and Checkout Container (Initially Hidden) -->
+                <div class="quantity-container" style="display: none;">
+                    <span class="quantity-label">Quantity:</span>
+                    <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1" readonly />
+                    <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                </div>
+            </div>
+            
+            <!-- Example of another product card -->
+            <div class="product-card">
+                <img src="storeimage/teeth.jpg" alt="Product Image">
+                <h3>Calcarea Phos</h3>
+                <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="price">₹153</div>
+                <p>Calcarea Phos 6x || Calcium Teething Tablets || SET OF 2</p>
+                <button onclick="addToCart(this)">Add to Cart</button>
+    
+                <!-- Quantity and Checkout Container (Initially Hidden) -->
+                <div class="quantity-container" style="display: none;">
+                    <span class="quantity-label">Quantity:</span>
+                    <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1" readonly />
+                    <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                </div>
+            </div>
+                  <div class="product-card">
+                    <img src="storeimage/hair.jpg" alt="Product Image">
+                    <h3>Sbl Scalptone Tablet</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹155</div>
+                    <p>KRIG's Sbl Scalptone Tablet || Homeopathic Haircare Medicine        </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <!-- Quantity and Checkout Container (Initially Hidden) -->
+                    <div class="quantity-container" style="display: none;">
+                    <span class="quantity-label">Quantity:</span>
+                    <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1" readonly />
+                    <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                    
+                    </div>
+                    
+                  </div>
+                  <div class="product-card">
+                    <img src="storeimage/sinus.jpg" alt="Product Image">
+                    <h3>Sinus Drops</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹160</div>
+                    <p>Dr. Bakshi's Bakson's Homeopathy Sinus Drops || 30 ml       </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+                  <div class="product-card">
+                    <img src="storeimage/arnica.jpg" alt="Product Image">
+                    <h3>Arnica Tablets</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹300</div>
+                    <p>Arnica Extract 100 Capsules, 600 mg per Capsules Arnica Montana           </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+                  <div class="product-card">
+                    <img src="storeimage/baptisia.jpg" alt="Product Image">
+                    <h3>Baptisia Drops</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹200</div>
+                    <p>Baptisia Tinctoria Q - 30mL || Homeopathic Mother Tincture Drops          </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+                  <div class="product-card">
+                    <img src="storeimage/belladona.jpg" alt="Product Image">
+                    <h3>SBL Belladonna </h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹100</div>
+                    <p>SBL Belladonna 30 CH (30ml) || SBL Dilution           </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+                  <div class="product-card">
+                    <img src="storeimage/AT.jpg" alt="Product Image">
+                    <h3>AT Tabs</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹300</div>
+                    <p>AT Tabs (450g) || SBL Homeopathy           </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+        
+                  <div class="product-card">
+                    <img src="storeimage/kanthari.jpg" alt="Product Image">
+                    <h3>AT Tabs</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹200</div>
+                    <p>Kanthari Plus For Healthy Living Capsule, Pack of 1           </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+                  <div class="product-card">
+                    <img src="storeimage/aconite.jpg" alt="Product Image">
+                    <h3>Aconite </h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹200</div>
+                    <p>Homeopathic Diluted Globules 30 Grams           </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+                  <div class="product-card">
+                    <img src="storeimage/colo.jpg" alt="Product Image">
+                    <h3>ColocynthQ </h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹200</div>
+                    <p>ColocynthQ - 30mL, Homeopathic Mother Tincture Drops          </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+                  <div class="product-card">
+                    <img src="storeimage/bryonia.jpg" alt="Product Image">
+                    <h3>Bryonia Alba</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹109</div>
+                    <p>Bryonia Alba 11ML           </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+                
+                  
+                  <div class="product-card">
+                    <img src="storeimage/aller.jpg" alt="Product Image">
+                    <h3>Allergy Drops</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹150</div>
+                    <p>Phbl P3 Allergy Homeopathic Oral Drop 30 ml        </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+                  <div class="product-card">
+                    <img src="storeimage/throat.jpg" alt="Product Image">
+                    <h3>Bakson Throat Tablets</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹100</div>
+                    <p>Dr. Bakshi's Bakson Homeopathy Throat Tablets      </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+                  <div class="product-card">
+                    <img src="storeimage/cough.jpg" alt="Product Image">
+                    <h3>Bakson Kof Aid Tablets</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹70</div>
+                    <p>Dr. Bakshi's Bakson Homeopathy Cough Tablets      </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+                  <div class="product-card">
+                    <img src="storeimage/gastric.jpg" alt="Product Image">
+                    <h3>Bakson Gastro Aid Tablets</h3>
+                        <div style="color:rgb(22, 43, 162) ; font-size: 1.5rem;">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                
+                    <div class="price">₹99</div>
+                    <p>Dr. Bakshi's Bakson Homeopathy Gastro Tablets      </p>
+                    <button onclick="addToCart(this)">Add to Cart</button>
+                    <div class="quantity-container" style="display: none;">
+                        <span class="quantity-label">Quantity:</span>
+                        <button class="quantity-decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" readonly />
+                        <button class="quantity-increase" onclick="changeQuantity(this, 1)">+</button>
+                        
+                    </div>
+                  </div>
+        
+
+            <!-- Add additional product cards here -->
+
+        </div>
+    </section>
+    <!-- Services section ends -->
+    <!-- Footer section starts -->
+    <section class="footer">
+        <div class="box-container">
+            <div class="box">
+                <h3>Quick Links</h3>
+                <a href="index.html"><i class="fas fa-chevron-right"></i> Home</a>
+                <a href="services.html"><i class="fas fa-chevron-right"></i> Services</a>
+                <a href="about.html"><i class="fas fa-chevron-right"></i> About</a>
+                <a href="services/ourDoctors.html"><i class="fas fa-chevron-right"></i> Doctors</a>
+                <a href="../blogs.html"><i class="fas fa-chevron-right"></i> Blogs</a>
+            </div>
+
+            <div class="box">
+                <h3>Our Services</h3>
+                <a href="services/checkups.html"><i class="fas fa-chevron-right"></i> Checkups & Tests</a>
+                <a href="services/ambulance.html"><i class="fas fa-chevron-right"></i> 24/7 Ambulance Services</a>
+                <a href="services/ourDoctors.html"><i class="fas fa-chevron-right"></i> Doctors</a>
+                <a href="services/hospitals.html"><i class="fas fa-chevron-right"></i> Hospitals</a>
+                <a href="services/store.html"><i class="fas fa-chevron-right"></i> Medical Store</a>
+            </div>
+
+            <div class="box">
+                <h3>Contact Info</h3>
+                <a href="#"><i class="fas fa-phone"></i> +91 1800-xxxx-xx</a>
+                <a href="#"><i class="fas fa-envelope"></i> MediDoctor@gmail.com</a>
+                <a href="#"><i class="fas fa-map-marker-alt"></i> Gwalior (M.P), India - 474011</a>
+            </div>
+
+            <div class="box">
+                <h3>Follow Us</h3>
+                <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+
+        <div class="credit">Created By <span>MediDoctor IT Team</span> | All Rights Reserved</div>
+    </section>
+    <!-- Footer section ends -->
+
+    <!-- Script Link -->
+    
+</body>
+
+</html>
